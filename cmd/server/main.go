@@ -27,7 +27,7 @@ func main() {
 	var dsn string
 	if instanceConnectionName != "" {
 		// Cloud SQL Auth Proxy経由での接続用DSN
-		dsn = fmt.Sprintf("%s:%s@unix(/cloudsql/%s)/%s", mysqlUser, mysqlPwd, instanceConnectionName, mysqlDatabase)
+		dsn = fmt.Sprintf("%s:%s@%s/%s", mysqlUser, mysqlPwd, mysqlHost, mysqlDatabase)
 	} else {
 		// ローカル接続用DSN
 		dsn = fmt.Sprintf("%s:%s@tcp(%s)/%s", mysqlUser, mysqlPwd, mysqlHost, mysqlDatabase)
