@@ -12,6 +12,8 @@ import (
 	"uttc-backend/controller/tweet"
 	"uttc-backend/controller/user"
 
+	"github.com/gin-contrib/cors"
+
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/gin-gonic/gin"
@@ -49,6 +51,15 @@ func main() {
 	config.SetDB(db)
 
 	r := gin.Default()
+
+	// CORS設定
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000", "https://uttc-frontend-five.vercel.app/"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 
 	// Middleware
 	r.Use(gin.Logger())
