@@ -14,25 +14,27 @@ import (
 	"uttc-backend/controller/user"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
+
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+
+	}
 	// DB接続のための準備
 	mysqlUser := os.Getenv("MYSQL_USER")
-	mysqlPwd := os.Getenv("MYSQL_PWD")
+	mysqlPwd := os.Getenv("MYSQL_PASSWORD")
 	mysqlHost := os.Getenv("MYSQL_HOST")
 	mysqlDatabase := os.Getenv("MYSQL_DATABASE")
-	instanceConnectionName := os.Getenv("INSTANCE_CONNECTION_NAME")
 
 	var dsn string
-	if instanceConnectionName != "" {
-		// Cloud SQL Auth Proxy経由での接続用DSN
-		dsn = fmt.Sprintf("%s:%s@%s/%s", mysqlUser, mysqlPwd, mysqlHost, mysqlDatabase)
-	} else {
-		// ローカル接続用DSN
-		dsn = fmt.Sprintf("%s:%s@tcp(%s)/%s", mysqlUser, mysqlPwd, mysqlHost, mysqlDatabase)
-	}
+	dsn = fmt.Sprintf("%s:%s@%s/%s", mysqlUser, mysqlPwd, mysqlHost, mysqlDatabase)
 
+	log.Println(dsn)
 	// データベース接続の初期化
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
