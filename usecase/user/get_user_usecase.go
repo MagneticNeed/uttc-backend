@@ -7,7 +7,7 @@ import (
 )
 
 // GetUserUsecase handles the business logic for retrieving a user by their ID
-func GetUserUsecase(userID string) (*model.User, error) {
+func GetUserByIDUsecase(userID string) (*model.User, error) {
 	// Get the database connection
 	db := config.GetDB()
 
@@ -18,4 +18,10 @@ func GetUserUsecase(userID string) (*model.User, error) {
 	}
 
 	return user, nil
+}
+
+// GetAllUsersUsecase retrieves all users
+func GetAllUsersUsecase() ([]model.User, error) {
+	db := config.GetDB()
+	return dao.GetAllUsers(db)
 }

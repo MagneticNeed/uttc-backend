@@ -6,23 +6,27 @@ import (
 	"log"
 	"os"
 
-	_ "github.com/go-sql-driver/mysql"
 	"uttc-backend/config"
 	"uttc-backend/controller/like"
 	"uttc-backend/controller/reply"
 	"uttc-backend/controller/tweet"
 	"uttc-backend/controller/user"
 
+	_ "github.com/go-sql-driver/mysql"
+
 	"github.com/gin-gonic/gin"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
 
-	//err := godotenv.Load(".env")
-	//if err != nil {
-	//	log.Fatalf("Error loading .env file: %v", err)
-	//
-	//}
+	// .envファイルの読み込み, デプロイ時はコメントアウト
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+
+	}
 	// DB接続のための準備
 	mysqlUser := os.Getenv("MYSQL_USER")
 	mysqlPwd := os.Getenv("MYSQL_PASSWORD")
@@ -30,6 +34,7 @@ func main() {
 	mysqlDatabase := os.Getenv("MYSQL_DATABASE")
 
 	var dsn string
+
 	dsn = fmt.Sprintf("%s:%s@%s/%s", mysqlUser, mysqlPwd, mysqlHost, mysqlDatabase)
 
 	log.Println(dsn)
@@ -68,7 +73,8 @@ func main() {
 	r.GET("/tweets", tweet.GetAllTweetsController)
 
 	r.POST("/users", user.RegisterUserController)
-	r.GET("/users", user.GetUserController)
+	r.GET("/users/:id", user.GetUserByIDController)
+	r.GET("/users", user.GetAllUsersController)
 	r.PUT("/users", user.UpdateUserController)
 
 	// Start server

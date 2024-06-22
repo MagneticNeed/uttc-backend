@@ -31,17 +31,32 @@ func RegisterUserController(c *gin.Context) {
 	c.JSON(http.StatusCreated, user)
 }
 
-// GetUserController handles retrieving a user's information
-func GetUserController(c *gin.Context) {
+// GetUserByIDController handles retrieving a user by its ID
+func GetUserByIDController(c *gin.Context) {
 	userID := c.Param("id")
 
-	user, err := userUsecase.GetUserUsecase(userID)
+	user, err := userUsecase.GetUserByIDUsecase(userID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	if user == nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, user)
+}
+
+// GetAllUsersController handles retrieving all users
+func GetAllUsersController(c *gin.Context) {
+	users, err := userUsecase.GetAllUsersUsecase()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, users)
 }
 
 // UpdateUserController handles updating a user's information

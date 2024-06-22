@@ -2,6 +2,7 @@ package dao
 
 import (
 	"database/sql"
+	"time"
 	"uttc-backend/model"
 )
 
@@ -67,6 +68,7 @@ func UserHasLiked(db *sql.DB, postID string, userID string) (bool, error) {
 	return count > 0, nil
 }
 
+// GetAllLikes retrieves all likes from the database
 func GetAllLikes(db *sql.DB) ([]model.Like, error) {
 	query := "SELECT id, post_id, liked_by, created_at, post_type FROM likes"
 	rows, err := db.Query(query)
@@ -78,9 +80,15 @@ func GetAllLikes(db *sql.DB) ([]model.Like, error) {
 	var likes []model.Like
 	for rows.Next() {
 		var like model.Like
-		if err := rows.Scan(&like.ID, &like.PostID, &like.LikedBy, &like.CreatedAt, &like.PostType); err != nil {
+		var createdAtStr string
+		if err := rows.Scan(&like.ID, &like.PostID, &like.LikedBy, &createdAtStr, &like.PostType); err != nil {
 			return nil, err
 		}
+		createdAt, err := time.Parse("2006-01-02 15:04:05", createdAtStr)
+		if err != nil {
+			return nil, err
+		}
+		like.CreatedAt = createdAt
 		likes = append(likes, like)
 	}
 	return likes, nil
@@ -92,12 +100,18 @@ func GetLikeByID(db *sql.DB, likeID string) (*model.Like, error) {
 	row := db.QueryRow(query, likeID)
 
 	var like model.Like
-	if err := row.Scan(&like.ID, &like.PostID, &like.LikedBy, &like.CreatedAt, &like.PostType); err != nil {
+	var createdAtStr string
+	if err := row.Scan(&like.ID, &like.PostID, &like.LikedBy, &createdAtStr, &like.PostType); err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil // no like found with the given ID
 		}
 		return nil, err
 	}
+	createdAt, err := time.Parse("2006-01-02 15:04:05", createdAtStr)
+	if err != nil {
+		return nil, err
+	}
+	like.CreatedAt = createdAt
 	return &like, nil
 }
 
