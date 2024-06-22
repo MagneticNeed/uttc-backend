@@ -1,9 +1,12 @@
 package main
 
 import (
+	"database/sql"
+	"fmt"
 	"log"
 	"os"
 
+	_ "github.com/go-sql-driver/mysql"
 	"uttc-backend/config"
 	"uttc-backend/controller/like"
 	"uttc-backend/controller/reply"
@@ -14,16 +17,33 @@ import (
 )
 
 func main() {
-	// Get environment variables for DB connection
-	dbUser := os.Getenv("DB_USER")
-	dbPassword := os.Getenv("DB_PASSWORD")
-	dbName := os.Getenv("DB_NAME")
-	dbHost := os.Getenv("DB_HOST")
+	// DB接続のための準備
+	mysqlUser := os.Getenv("MYSQL_USER")
+	mysqlPwd := os.Getenv("MYSQL_PWD")
+	mysqlHost := os.Getenv("MYSQL_HOST")
+	mysqlDatabase := os.Getenv("MYSQL_DATABASE")
+	instanceConnectionName := os.Getenv("INSTANCE_CONNECTION_NAME")
 
-	// Initialize the database connection
-	if err := config.InitDB(dbUser, dbPassword, dbName, dbHost); err != nil {
+	var dsn string
+	if instanceConnectionName != "" {
+		// Cloud SQL Auth Proxy経由での接続用DSN
+		dsn = fmt.Sprintf("%s:%s@unix(/cloudsql/%s)/%s", mysqlUser, mysqlPwd, instanceConnectionName, mysqlDatabase)
+	} else {
+		// ローカル接続用DSN
+		dsn = fmt.Sprintf("%s:%s@tcp(%s)/%s", mysqlUser, mysqlPwd, mysqlHost, mysqlDatabase)
+	}
+
+	// データベース接続の初期化
+	db, err := sql.Open("mysql", dsn)
+	if err != nil {
 		log.Fatalf("Could not initialize database: %v", err)
 	}
+
+	if err := db.Ping(); err != nil {
+		log.Fatalf("Could not establish database connection: %v", err)
+	}
+
+	config.SetDB(db)
 
 	r := gin.Default()
 
