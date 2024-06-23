@@ -54,7 +54,7 @@ func main() {
 
 	// CORS設定
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000", "https://uttc-frontend-five.vercel.app/"},
+		AllowOrigins:     []string{"https://uttc-frontend-five.vercel.app/"}, // {"http://localhost:3000", "https://uttc-frontend-five.vercel.app/"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
