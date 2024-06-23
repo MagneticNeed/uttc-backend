@@ -61,7 +61,10 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	log.Println("CORS settings applied")
+	// プリフライトリクエストに対応するためのオプションルート
+	r.OPTIONS("/*path", func(c *gin.Context) {
+		c.Status(204)
+	})
 
 	// Middleware
 	r.Use(gin.Logger())
