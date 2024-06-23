@@ -5,6 +5,7 @@ import (
 
 	"uttc-backend/model"
 	userUsecase "uttc-backend/usecase/user"
+	"uttc-backend/util"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,11 +18,7 @@ func RegisterUserController(c *gin.Context) {
 		return
 	}
 
-	// Firebaseによる認証情報を含むユーザーIDを受け取る前提
-	if user.ID == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "User ID is required"})
-		return
-	}
+	user.ID = util.NewULID()
 
 	if err := userUsecase.RegisterUserUsecase(user); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

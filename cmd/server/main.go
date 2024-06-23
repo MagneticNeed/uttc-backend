@@ -70,74 +70,27 @@ func main() {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
-	// ルートの設定
-	r.POST("/likes", func(c *gin.Context) {
-		log.Println("POST /likes request received")
-		like.PostLikeController(c)
-	})
-	r.GET("/likes", func(c *gin.Context) {
-		log.Println("GET /likes request received")
-		like.GetAllLikesController(c)
-	})
-	r.GET("/likes/:id", func(c *gin.Context) {
-		log.Println("GET /likes/:id request received")
-		like.GetLikeController(c)
-	})
-	r.DELETE("/likes/:id", func(c *gin.Context) {
-		log.Println("DELETE /likes/:id request received")
-		like.DeleteLikeController(c)
-	})
+	// Routes
+	r.POST("/likes", like.PostLikeController)
+	r.GET("/likes", like.GetAllLikesController)
+	r.GET("/likes/:id", like.GetLikeController)
+	r.DELETE("/likes/:id", like.DeleteLikeController)
 
-	r.POST("/replies", func(c *gin.Context) {
-		log.Println("POST /replies request received")
-		reply.PostReplyController(c)
-	})
-	r.GET("/replies", func(c *gin.Context) {
-		log.Println("GET /replies request received")
-		reply.GetAllRepliesController(c)
-	})
-	r.GET("/replies/:id", func(c *gin.Context) {
-		log.Println("GET /replies/:id request received")
-		reply.GetReplyController(c)
-	})
-	r.DELETE("/replies/:id", func(c *gin.Context) {
-		log.Println("DELETE /replies/:id request received")
-		reply.DeleteReplyController(c)
-	})
+	r.POST("/replies", reply.PostReplyController)
+	r.GET("/replies", reply.GetAllRepliesController)
+	r.GET("/replies/:id", reply.GetReplyController)
+	r.DELETE("/replies/:id", reply.DeleteReplyController)
 
-	r.POST("/tweets", func(c *gin.Context) {
-		log.Println("POST /tweets request received")
-		tweet.PostTweetController(c)
-	})
-	r.DELETE("/tweets/:id", func(c *gin.Context) {
-		log.Println("DELETE /tweets/:id request received")
-		tweet.DeleteTweetController(c)
-	})
-	r.GET("/tweets/:id", func(c *gin.Context) {
-		log.Println("GET /tweets/:id request received")
-		tweet.GetTweetByIDController(c)
-	})
-	r.GET("/tweets", func(c *gin.Context) {
-		log.Println("GET /tweets request received")
-		tweet.GetAllTweetsController(c)
-	})
+	r.POST("/tweets", tweet.PostTweetController)
+	r.DELETE("/tweets/:id", tweet.DeleteTweetController)
+	r.GET("/tweets/:id", tweet.GetTweetByIDController)
+	r.GET("/tweets", tweet.GetAllTweetsController)
 
-	r.POST("/users", func(c *gin.Context) {
-		log.Println("POST /users request received")
-		user.RegisterUserController(c)
-	})
-	r.GET("/users/:id", func(c *gin.Context) {
-		log.Println("GET /users/:id request received")
-		user.GetUserByIDController(c)
-	})
-	r.GET("/users", func(c *gin.Context) {
-		log.Println("GET /users request received")
-		user.GetAllUsersController(c)
-	})
-	r.PUT("/users", func(c *gin.Context) {
-		log.Println("PUT /users request received")
-		user.UpdateUserController(c)
-	})
+	r.POST("/users", user.RegisterUserController)
+	r.GET("/users/:id", user.GetUserByIDController)
+	r.GET("/users", user.GetAllUsersController)
+	r.PUT("/users", user.UpdateUserController)
+
 	// Start server
 	port := os.Getenv("PORT")
 	if port == "" {
