@@ -61,6 +61,8 @@ func main() {
 		AllowCredentials: true,
 	}))
 
+	log.Println("CORS settings applied")
+
 	// Middleware
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
