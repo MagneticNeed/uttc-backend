@@ -1,6 +1,7 @@
 package user
 
 import (
+	"fmt"
 	"net/http"
 
 	"uttc-backend/model"
@@ -33,6 +34,22 @@ func GetUserByIDController(c *gin.Context) {
 	userID := c.Param("id")
 
 	user, err := userUsecase.GetUserByIDUsecase(userID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	if user == nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, user)
+}
+
+func GetUserByEmailController(c *gin.Context) {
+	userEmail := c.Param("email")
+	fmt.Println(userEmail)
+	user, err := userUsecase.GetUserByEmailUsecase(userEmail)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

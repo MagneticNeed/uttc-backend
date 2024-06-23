@@ -28,6 +28,20 @@ func GetUserByID(db *sql.DB, userID string) (*model.User, error) {
 	return &user, nil
 }
 
+// func GetUserByEmail(db *sql.DB, userEmail string) (*model.User, error) {
+// 	query := "SELECT id, username, email, password FROM users WHERE id = ?"
+// 	row := db.QueryRow(query, userEmail)
+
+// 	var user model.User
+// 	if err := row.Scan(&user.ID, &user.Username, &user.Email, &user.Password); err != nil {
+// 		if err == sql.ErrNoRows {
+// 			return nil, nil // no user found with the given Email
+// 		}
+// 		return nil, err
+// 	}
+// 	return &user, nil
+// }
+
 // GetAllUsers retrieves all users from the database
 func GetAllUsers(db *sql.DB) ([]model.User, error) {
 	query := "SELECT id, username, email, password FROM users"
