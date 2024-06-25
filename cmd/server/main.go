@@ -17,22 +17,21 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 func main() {
 
 	// .envファイルの読み込み, デプロイ時はコメントアウト
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
+	// err := godotenv.Load(".env")
+	// if err != nil {
+	// 	log.Fatalf("Error loading .env file: %v", err)
 
-	}
-	// DB接続のための準備
-	mysqlUser := os.Getenv("MYSQL_USER")
-	mysqlPwd := os.Getenv("MYSQL_PASSWORD")
-	mysqlHost := os.Getenv("MYSQL_HOST")
-	mysqlDatabase := os.Getenv("MYSQL_DATABASE")
+	// }
+	// // DB接続のための準備
+	// mysqlUser := os.Getenv("MYSQL_USER")
+	// mysqlPwd := os.Getenv("MYSQL_PASSWORD")
+	// mysqlHost := os.Getenv("MYSQL_HOST")
+	// mysqlDatabase := os.Getenv("MYSQL_DATABASE")
 
 	var dsn string
 
