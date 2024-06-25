@@ -27,11 +27,11 @@ func main() {
 	// 	log.Fatalf("Error loading .env file: %v", err)
 
 	// }
-	// // DB接続のための準備
-	// mysqlUser := os.Getenv("MYSQL_USER")
-	// mysqlPwd := os.Getenv("MYSQL_PASSWORD")
-	// mysqlHost := os.Getenv("MYSQL_HOST")
-	// mysqlDatabase := os.Getenv("MYSQL_DATABASE")
+	// DB接続のための準備
+	mysqlUser := os.Getenv("MYSQL_USER")
+	mysqlPwd := os.Getenv("MYSQL_PASSWORD")
+	mysqlHost := os.Getenv("MYSQL_HOST")
+	mysqlDatabase := os.Getenv("MYSQL_DATABASE")
 
 	var dsn string
 
